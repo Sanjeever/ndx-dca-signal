@@ -346,7 +346,11 @@ class AkShareClient:
     def fetch_fund_history_approx(self, fund: FundConfig) -> list[FundHistoryRow]:
         symbol = f"{fund.market.lower()}{fund.code}"
         price_frame = quiet_call(ak.fund_etf_hist_sina, symbol=symbol)
-        nav_frame = quiet_call(ak.fund_etf_fund_info_em, fund=fund.code)
+        nav_frame = quiet_call(
+            ak.fund_open_fund_info_em,
+            symbol=fund.code,
+            indicator="单位净值走势",
+        )
         required_price_columns = {"date", "close"}
         required_nav_columns = {"净值日期", "单位净值"}
         missing_price_columns = required_price_columns - set(price_frame.columns)
